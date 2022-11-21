@@ -19,12 +19,19 @@ export default class Todo{
     return this.projects;
   }
 
-  getProject(projectName) {
-    return this.projects.find((project) => project.getProjectTitle() === projectName);
-    // console.log(projectName);
+  getProject(projectTitle) {
+    return this.projects.find((project) => project.getProjectTitle() === projectTitle);
   }
 
   addProject(project){
     this.projects.push(project);
+  }
+
+  deleteProject(projectTitle){
+    const projectToDelete = this.projects.find(
+      (project) => project.getProjectTitle() === projectTitle
+    )
+    this.projects.splice(this.projects.indexOf(projectToDelete), 1)
+    
   }
 }

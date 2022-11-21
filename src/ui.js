@@ -18,6 +18,7 @@ export default class UI{
     let todo = Object.assign(new Todo(), JSON.parse(localStorage.getItem('todoList')));
 
     // Turn projects into Project objects instead of generic objects
+    // when storing into the todo list array
     todo.setProjects(
       todo
       .getProjects()
@@ -35,7 +36,6 @@ export default class UI{
     projects
       .getProjects()
       .forEach((project) => {
-        // console.log(project);
         UI.createProjectItem(project);
       });
 
@@ -88,16 +88,36 @@ export default class UI{
     taskList.innerHTML = '';
   }
 
-  static createProjectItem(project){
+  static refreshProjectList(){
     let projectList = document.querySelector('.project-list');
-    let element = document.createElement('button');
-    element.textContent = project.projectTitle;
-    element.value = project.projectTitle;
-    element.addEventListener('click', (e)=>{
+    projectList.innerHTML = '';
+  }
+
+  static createProjectItem(project){
+    const projectList = document.querySelector('.project-list');
+    const element = document.createElement('div');
+    element.classList.add('project-btn');
+    const projectTitle = document.createElement('div');
+    projectTitle.classList.add('left-btn-section');
+    projectTitle.textContent = project.projectTitle;
+    projectTitle.addEventListener('click', (e)=>{
       UI.refreshTaskList();
-      UI.loadTasks(e.target.value);
-      // console.log(e.target.value);
+      UI.loadTasks(e.target.textContent);
     });
+
+    element.appendChild(projectTitle);
+
+    let deleteBtn = document.createElement('div')
+    deleteBtn.classList.add('right-btn-section');
+    deleteBtn.textContent = 'X';
+    deleteBtn.addEventListener('click', (e) =>{
+      let todo =  UI.getTodo();
+      UI.refreshProjectList();
+      todo.deleteProject(e.target.parentNode.firstChild.textContent);
+      UI.saveTodo(todo);
+      UI.loadProjects();
+    })
+    element.appendChild(deleteBtn);
     projectList.appendChild(element);
   }
 
@@ -122,6 +142,7 @@ export default class UI{
     element.addEventListener('click', () =>{
       let testProj = new Project('Test');
       let todo =  UI.getTodo();
+      UI.refreshProjectList();
       todo.addProject(testProj);
       UI.saveTodo(todo);
       UI.loadProjects();

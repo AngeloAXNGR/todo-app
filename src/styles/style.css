@@ -38,3 +38,16 @@ body{
   display:flex;
   gap: 32px;
 }
+
+.project-btn{
+  border:none;
+  display:flex;
+  justify-content: space-between;
+  width: 70%;
+  font-size: 2rem;
+  font-weight:bold;
+}
+
+.left-btn-section,.right-btn-section{
+  cursor:pointer;
+}
