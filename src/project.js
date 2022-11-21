@@ -1,7 +1,7 @@
 import Task from "./task";
 export default class Project{
-  constructor(title){
-    this.title = title;
+  constructor(projectTitle){
+    this.projectTitle = projectTitle;
     this.tasks = [];
     this.tasks.push(new Task('Wash the Dishes', '11-20-2022', 'Low'));
     this.tasks.push(new Task('Wash the Dishes', '11-20-2022', 'Low'));
@@ -9,16 +9,16 @@ export default class Project{
     this.tasks.push(new Task('Wash the Dishes', '11-20-2022', 'Low'));
   }
 
-  getTitle(){
-    return this.title;
+  getProjectTitle(){
+    return this.projectTitle;
   }
 
   getTasks(){
     return this.tasks;
   }
 
-  setTitle(title){
-    this.title = title;
+  setProjectTitle(projectTitle){
+    this.projectTitle = projectTitle;
   }
 
   addTask(task){

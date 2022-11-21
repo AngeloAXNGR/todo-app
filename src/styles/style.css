@@ -15,10 +15,21 @@ body{
   background-color: lightpink;
   flex:1;
   border:solid 1px black;
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  gap: 5px;
+}
+
+.project-list > button{
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 2rem;
+
 }
 
 .task-list{
-  flex:2;
+  flex:3;
   background-color: lightblue;
   border:solid 1px black;
 }
