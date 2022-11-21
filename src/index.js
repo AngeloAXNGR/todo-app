@@ -1,2 +1,3 @@
+import UI from "./ui";
 import './styles/style.css';
-console.log('Hello World');
+document.addEventListener('DOMContentLoaded', UI.loadHomePage)
