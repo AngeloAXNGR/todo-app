@@ -4,7 +4,7 @@ import Todo from './todo';
 
 export default class UI{
   static loadHomePage(){
-    UI.addProjectButton();
+    UI.loadButtons();
     UI.createHeaderDiv();
     UI.createMainContentDiv(UI.createProjectListDiv(), UI.createTaskListDiv());
     UI.loadProjects();
@@ -37,6 +37,7 @@ export default class UI{
   }
 
 
+  // Project Data Manipulation Functions
   static loadProjects(){
     let projects = UI.getTodo();
     projects
@@ -46,6 +47,23 @@ export default class UI{
       });
 
   }  
+
+  static addProject(){
+    let testProj = new Project('Test');
+    let todo =  UI.getTodo();
+    UI.refreshProjectList();
+    todo.addProject(testProj);
+    UI.saveTodo(todo);
+    UI.loadProjects();
+  }
+
+  static deleteProject(project){
+    let todo = UI.getTodo();
+    todo.deleteProject(project);
+    UI.refreshProjectList();
+    UI.saveTodo(todo);
+    UI.loadProjects();
+  }
 
   static loadTasks(projectName){
     let project = UI.getTodo();
@@ -89,6 +107,7 @@ export default class UI{
   }
 // ***************************
 
+  // DOM Related Functions
   static refreshTaskList(){
     let taskList = document.querySelector('.task-list');
     taskList.innerHTML = '';
@@ -117,15 +136,13 @@ export default class UI{
     deleteBtn.classList.add('right-btn-section');
     deleteBtn.textContent = 'X';
     deleteBtn.addEventListener('click', (e) =>{
-      let todo =  UI.getTodo();
-      UI.refreshProjectList();
-      todo.deleteProject(e.target.parentNode.firstChild.textContent);
-      UI.saveTodo(todo);
-      UI.loadProjects();
+      UI.deleteProject(e.target.parentNode.firstChild.textContent);
     })
     element.appendChild(deleteBtn);
     projectList.appendChild(element);
   }
+
+
 
   static createTaskItem(task){
     let taskList = document.querySelector('.task-list');
@@ -141,17 +158,18 @@ export default class UI{
 
 
   // Buttons
+
+  static loadButtons(){
+    console.log('loadButtons() is called');
+    UI.addProjectButton();
+  }
+
   static addProjectButton(){
     let element = document.createElement('button');
     element.classList.add('add-button');
     element.textContent = "Add Project";
     element.addEventListener('click', () =>{
-      let testProj = new Project('Test');
-      let todo =  UI.getTodo();
-      UI.refreshProjectList();
-      todo.addProject(testProj);
-      UI.saveTodo(todo);
-      UI.loadProjects();
+      UI.addProject();
     });
     document.body.appendChild(element)
   }
