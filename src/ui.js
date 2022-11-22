@@ -17,15 +17,21 @@ export default class UI{
   static getTodo(){
     let todo = Object.assign(new Todo(), JSON.parse(localStorage.getItem('todoList')));
 
-    // Turn projects into Project objects instead of generic objects
-    // when storing into the todo list array
+    // Associate each project item with Project Class in order to have access to Project instance methods 
+    // without doing this, each project item are object literal inside the todoList array which does not have access to Project class methods
     todo.setProjects(
       todo
       .getProjects()
       .map((project) => Object.assign(new Project(), project))
     );
 
-    console.log(todo);
+    //Associate each task item with Task Class in order to have access to Task instance methods 
+    // without doing this, each project item are object literal inside the project array which does not have access to Task methods
+    todo
+      .getProjects()
+      .forEach((project) => project.setTasks(project.getTasks().map((task) => Object.assign(new Task(), task))));
+
+    // console.log(todo);
     // return list of projects
     return todo;
   }
