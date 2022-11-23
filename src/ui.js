@@ -1,13 +1,17 @@
 import Project from './project';
 import Task from './task';
 import Todo from './todo';
+import TrashIcon from './assets/trash.png';
+import ProjectIcon from './assets/project-list.png';
 
 export default class UI{
   static loadHomePage(){
-    UI.loadButtons();
     UI.createHeaderDiv();
     UI.createMainContentDiv(UI.createProjectListDiv(), UI.createTaskListDiv());
+    UI.loadButtons();
     UI.loadProjects();
+    UI.loadForms();
+
   }
 
   static saveTodo(data){
@@ -31,7 +35,7 @@ export default class UI{
       .getProjects()
       .forEach((project) => project.setTasks(project.getTasks().map((task) => Object.assign(new Task(), task))));
 
-    // console.log(todo);
+    console.log(todo);
     // return list of projects
     return todo;
   }
@@ -48,11 +52,11 @@ export default class UI{
 
   }  
 
-  static addProject(){
-    let testProj = new Project('Test');
+  static addProject(project){
+    // let testProj = new Project('Test');
     let todo =  UI.getTodo();
     UI.refreshProjectList();
-    todo.addProject(testProj);
+    todo.addProject(project);
     UI.saveTodo(todo);
     UI.loadProjects();
   }
@@ -64,7 +68,9 @@ export default class UI{
     UI.saveTodo(todo);
     UI.loadProjects();
   }
+   // ***************************
 
+  // Task Data Manipulation Functions
   static loadTasks(projectName){
     let project = UI.getTodo();
     project
@@ -75,7 +81,7 @@ export default class UI{
       });
 
   }
-
+  // ***************************
 
   // General UI Layout
   static createHeaderDiv(){
@@ -93,7 +99,6 @@ export default class UI{
     document.body.appendChild(element);
   }
 
-
   static createTaskListDiv(){
     let element = document.createElement('div');
     element.classList.add('task-list');    
@@ -103,9 +108,19 @@ export default class UI{
   static createProjectListDiv(){
     let element = document.createElement('div');
     element.classList.add('project-list');
+    element.innerHTML = `
+      <div class="project-header">
+        <h1>Projects</h1>
+      </div>
+    
+      <div class="project-list-container">
+
+      </div>
+      `
     return element;
   }
-// ***************************
+
+  // ***************************
 
   // DOM Related Functions
   static refreshTaskList(){
@@ -115,16 +130,28 @@ export default class UI{
 
   static refreshProjectList(){
     let projectList = document.querySelector('.project-list');
-    projectList.innerHTML = '';
+    projectList.innerHTML = `
+      <div class="project-header">
+        <h1>Projects</h1>
+      </div>
+
+      <div class="project-list-container">
+
+      </div>
+      `
+    UI.addProjectButton();
   }
 
   static createProjectItem(project){
-    const projectList = document.querySelector('.project-list');
+    const projectList = document.querySelector('.project-list-container');
     const element = document.createElement('div');
     element.classList.add('project-btn');
     const projectTitle = document.createElement('div');
     projectTitle.classList.add('left-btn-section');
-    projectTitle.textContent = project.projectTitle;
+    projectTitle.innerHTML = `
+      <img src="${ProjectIcon}">
+      <p>${project.projectTitle}</p>
+    `
     projectTitle.addEventListener('click', (e)=>{
       UI.refreshTaskList();
       UI.loadTasks(e.target.textContent);
@@ -134,15 +161,16 @@ export default class UI{
 
     let deleteBtn = document.createElement('div')
     deleteBtn.classList.add('right-btn-section');
-    deleteBtn.textContent = 'X';
+    deleteBtn.innerHTML = `
+      <img src="${TrashIcon}">
+    `
+    
     deleteBtn.addEventListener('click', (e) =>{
       UI.deleteProject(e.target.parentNode.firstChild.textContent);
     })
     element.appendChild(deleteBtn);
     projectList.appendChild(element);
   }
-
-
 
   static createTaskItem(task){
     let taskList = document.querySelector('.task-list');
@@ -155,23 +183,74 @@ export default class UI{
     `
     taskList.appendChild(element);
   }
-
+   // ***************************
 
   // Buttons
-
   static loadButtons(){
     console.log('loadButtons() is called');
     UI.addProjectButton();
   }
 
   static addProjectButton(){
+    let projectHeader = document.querySelector('.project-header');
     let element = document.createElement('button');
     element.classList.add('add-button');
     element.textContent = "Add Project";
     element.addEventListener('click', () =>{
-      UI.addProject();
+      // UI.addProject();
+      let projectForm = document.querySelector('.project-form');
+      projectForm.style.display = 'flex';
     });
-    document.body.appendChild(element)
+    projectHeader.appendChild(element);
+  }
+ // ***************************
+
+
+ // Forms
+  static loadForms(){
+    UI.createProjectForm();
+  }
+
+  static closeProjectForm(){
+    let element = document.querySelector('.project-form');
+    element.style.display = 'none';
+  }
+
+  static submitProjectFormInput(){
+    let input = document.querySelector('#project-title');
+    let project = new Project(input.value);
+    UI.addProject(project);
+    UI.closeProjectForm();
+  }
+
+  static createProjectForm(){
+    let element = document.createElement('div');
+
+    element.classList.add('project-form');
+    element.innerHTML = `
+      <div class="form-header">
+        <h1>Add Project</h1>
+      </div>
+      <div class="form-inputs">
+        <input type="text" placeholder="Title" id="project-title">
+      </div>
+    `
+    let formBtns = document.createElement('div');
+    formBtns.classList.add('form-buttons')
+    let confirmBtn = document.createElement('button');
+    confirmBtn.classList.add('confirm-button');
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.addEventListener('click', UI.submitProjectFormInput )
+    let cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel'
+    cancelBtn.addEventListener('click', UI.closeProjectForm);
+    formBtns.append(confirmBtn,cancelBtn);
+    
+    element.appendChild(formBtns);
+
+    document.body.appendChild(element);
   }
 }
+ // ***************************
 
