@@ -3,6 +3,8 @@ import Task from './task';
 import Todo from './todo';
 import TrashIcon from './assets/trash.png';
 import ProjectIcon from './assets/project-list.png';
+import AddIcon from './assets/add.png';
+import EditIcon from './assets/edit.png';
 
 export default class UI{
   static loadHomePage(){
@@ -159,16 +161,21 @@ export default class UI{
 
     element.appendChild(projectTitle);
 
-    let deleteBtn = document.createElement('div')
-    deleteBtn.classList.add('right-btn-section');
-    deleteBtn.innerHTML = `
-      <img src="${TrashIcon}">
-    `
+    let projectBtnGroup = document.createElement('div')
+    projectBtnGroup.classList.add('right-btn-section');
+
+    let editBtn = document.createElement('img');
+    editBtn.src = EditIcon;
+
+    let deleteBtn = document.createElement('img');
+    deleteBtn.src = TrashIcon;
+
+    projectBtnGroup.append(editBtn, deleteBtn);
     
     deleteBtn.addEventListener('click', (e) =>{
       UI.deleteProject(e.target.parentNode.firstChild.textContent);
     })
-    element.appendChild(deleteBtn);
+    element.appendChild(projectBtnGroup);
     projectList.appendChild(element);
   }
 
@@ -193,11 +200,11 @@ export default class UI{
 
   static addProjectButton(){
     let projectHeader = document.querySelector('.project-header');
-    let element = document.createElement('button');
+    let element = document.createElement('img');
     element.classList.add('add-button');
-    element.textContent = "Add Project";
+    element.src = AddIcon;
     element.addEventListener('click', () =>{
-      // UI.addProject();
+
       let projectForm = document.querySelector('.project-form');
       projectForm.style.display = 'flex';
     });
@@ -221,6 +228,7 @@ export default class UI{
     let project = new Project(input.value);
     UI.addProject(project);
     UI.closeProjectForm();
+    input.value = '';
   }
 
   static createProjectForm(){
@@ -229,7 +237,9 @@ export default class UI{
     element.classList.add('project-form');
     element.innerHTML = `
       <div class="form-header">
-        <h1>Add Project</h1>
+        <div>
+          <h1>Add Project</h1>
+        </div>
       </div>
       <div class="form-inputs">
         <input type="text" placeholder="Title" id="project-title">
