@@ -104,6 +104,15 @@ export default class UI{
   static createTaskListDiv(){
     let element = document.createElement('div');
     element.classList.add('task-list');    
+    element.innerHTML = `
+      <div class="task-header">
+        <h1>Tasks</h1>
+      </div>
+
+      <div class="task-list-container">
+
+      </div>
+    `
     return element;
   }
 
@@ -127,7 +136,15 @@ export default class UI{
   // DOM Related Functions
   static refreshTaskList(){
     let taskList = document.querySelector('.task-list');
-    taskList.innerHTML = '';
+    taskList.innerHTML = `
+      <div class="task-header">
+        <h1>Tasks</h1>
+      </div>
+
+      <div class="task-list-container">
+
+      </div>
+    `
   }
 
   static refreshProjectList(){
@@ -173,24 +190,36 @@ export default class UI{
     projectBtnGroup.append(editBtn, deleteBtn);
     
     deleteBtn.addEventListener('click', (e) =>{
-      UI.deleteProject(e.target.parentNode.firstChild.textContent);
+      // UI.deleteProject(e.target.parentNode.firstChild.textContent);
+      UI.deleteProject(e.target.parentNode.parentNode.firstChild.textContent);
+      console.log(e.target.parentNode.parentNode.firstChild.textContent);
     })
     element.appendChild(projectBtnGroup);
     projectList.appendChild(element);
   }
 
   static createTaskItem(task){
-    let taskList = document.querySelector('.task-list');
+    let taskList = document.querySelector('.task-list-container');
     let element = document.createElement('div');
     element.classList.add('task-item');
-    element.innerHTML = `
+    let leftTaskSection = document.createElement('div');
+    leftTaskSection.classList.add('left-task-item-section');
+    leftTaskSection.innerHTML = `
+      <input type="checkbox">
       <h1>${task.title}</h1>
+    `
+    let rightTaskSection = document.createElement('div');
+    rightTaskSection.classList.add('right-task-item-section');
+    rightTaskSection.innerHTML = `
       <h1>${task.dueDate}</h1>
       <h1>${task.priority}</h1>
     `
+    element.append(leftTaskSection, rightTaskSection);
     taskList.appendChild(element);
   }
    // ***************************
+
+  
 
   // Buttons
   static loadButtons(){
