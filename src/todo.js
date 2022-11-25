@@ -20,6 +20,7 @@ export default class Todo{
   }
 
   getProject(projectTitle) {
+    console.log(this.projects.find((project) => project.getProjectTitle() === projectTitle));
     return this.projects.find((project) => project.getProjectTitle() === projectTitle);
   }
 

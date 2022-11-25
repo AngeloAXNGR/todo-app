@@ -67,20 +67,30 @@ export default class UI{
     let todo = UI.getTodo();
     todo.deleteProject(project);
     UI.refreshProjectList();
+    UI.refreshTaskList();
     UI.saveTodo(todo);
     UI.loadProjects();
   }
    // ***************************
 
   // Task Data Manipulation Functions
-  static loadTasks(projectName){
+  static loadTasks(projectTitle){
     let project = UI.getTodo();
     project
-      .getProject(projectName)
+      .getProject(projectTitle)
       .getTasks()
       .forEach((task) => {
         UI.createTaskItem(task);
       });
+
+  }
+
+  static deleteTask(projectTitle, taskTitle){
+    let project = UI.getTodo();
+    project
+      .getProject(projectTitle)
+      .getTask(taskTitle);
+
 
   }
   // ***************************
@@ -174,6 +184,14 @@ export default class UI{
     projectTitle.addEventListener('click', (e)=>{
       UI.refreshTaskList();
       UI.loadTasks(e.target.textContent);
+
+      // Add active state on selected project
+      const projectItems = document.querySelectorAll('.project-btn');
+      projectItems.forEach((project) => project.classList.remove('active'));
+      // console.log(projectItems)
+      const projectItem = e.target.parentNode.parentNode;
+      projectItem.classList.add('active');
+      
     });
 
     element.appendChild(projectTitle);
@@ -190,9 +208,8 @@ export default class UI{
     projectBtnGroup.append(editBtn, deleteBtn);
     
     deleteBtn.addEventListener('click', (e) =>{
-      // UI.deleteProject(e.target.parentNode.firstChild.textContent);
-      UI.deleteProject(e.target.parentNode.parentNode.firstChild.textContent);
-      console.log(e.target.parentNode.parentNode.firstChild.textContent);
+      UI.deleteProject(e.target.parentNode.parentNode.firstChild.textContent.trim());
+      console.log(e.target.parentNode.parentNode.firstChild.textContent.trim());
     })
     element.appendChild(projectBtnGroup);
     projectList.appendChild(element);
@@ -214,6 +231,29 @@ export default class UI{
       <h1>${task.dueDate}</h1>
       <h1>${task.priority}</h1>
     `
+    let deleteBtn = document.createElement('img');
+    deleteBtn.src = TrashIcon;
+    deleteBtn.setAttribute('style', 'width: 24px; height: 24px;') //temporary
+    deleteBtn.addEventListener('click', (e)=>{
+      console.log(e);
+      const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
+      const taskTitle = e.target.parentNode.parentNode.firstChild.textContent.trim();
+      console.log(projectTitle);
+      console.log(taskTitle);
+
+
+      // Delete Function
+      let project = UI.getTodo();
+      project
+        .getProject(projectTitle)
+        .deleteTask(taskTitle);
+      UI.refreshTaskList();
+      UI.saveTodo(project);
+      UI.loadTasks(projectTitle);
+    })
+
+    rightTaskSection.appendChild(deleteBtn);
+
     element.append(leftTaskSection, rightTaskSection);
     taskList.appendChild(element);
   }

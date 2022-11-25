@@ -1,0 +1,58 @@
+  static createTaskItem(task){
+    let taskList = document.querySelector('.task-list-container');
+    let element = document.createElement('div');
+    element.classList.add('task-item');
+    let leftTaskSection = document.createElement('div');
+    leftTaskSection.classList.add('left-task-item-section');
+    leftTaskSection.innerHTML = `
+      <input type="checkbox">
+      <h1>${task.title}</h1>
+    `
+    let rightTaskSection = document.createElement('div');
+    rightTaskSection.classList.add('right-task-item-section');
+    rightTaskSection.innerHTML = `
+      <h1>${task.dueDate}</h1>
+      <h1>${task.priority}</h1>
+    `
+    element.append(leftTaskSection, rightTaskSection);
+    taskList.appendChild(element);
+  }
+
+
+
+  static createProjectItem(project){
+    const projectList = document.querySelector('.project-list-container');
+    const element = document.createElement('div');
+    element.classList.add('project-btn');
+    const projectTitle = document.createElement('div');
+    projectTitle.classList.add('left-btn-section');
+    projectTitle.innerHTML = `
+      <img src="${ProjectIcon}">
+      <p>${project.projectTitle}</p>
+    `
+    projectTitle.addEventListener('click', (e)=>{
+      UI.refreshTaskList();
+      UI.loadTasks(e.target.textContent);
+    });
+
+    element.appendChild(projectTitle);
+
+    let projectBtnGroup = document.createElement('div')
+    projectBtnGroup.classList.add('right-btn-section');
+
+    let editBtn = document.createElement('img');
+    editBtn.src = EditIcon;
+
+    let deleteBtn = document.createElement('img');
+    deleteBtn.src = TrashIcon;
+
+    projectBtnGroup.append(editBtn, deleteBtn);
+    
+    deleteBtn.addEventListener('click', (e) =>{
+      // UI.deleteProject(e.target.parentNode.firstChild.textContent);
+      UI.deleteProject(e.target.parentNode.parentNode.firstChild.textContent);
+      console.log(e.target.parentNode.parentNode.firstChild.textContent);
+    })
+    element.appendChild(projectBtnGroup);
+    projectList.appendChild(element);
+  }
