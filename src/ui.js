@@ -1,6 +1,7 @@
 import Project from './project';
 import Task from './task';
 import Todo from './todo';
+import HeaderIcon from './assets/header-icon.png';
 import TrashIcon from './assets/trash.png';
 import ProjectIcon from './assets/project-list.png';
 import AddIcon from './assets/add.png';
@@ -67,11 +68,11 @@ export default class UI{
     let todo = UI.getTodo();
     todo.deleteProject(project);
     UI.refreshProjectList();
-    UI.refreshTaskList();
+    UI.refreshTaskList('');
     UI.saveTodo(todo);
     UI.loadProjects();
   }
-   // ***************************
+  // ***************************
 
   // Task Data Manipulation Functions
   static loadTasks(projectTitle){
@@ -82,6 +83,10 @@ export default class UI{
       .forEach((task) => {
         UI.createTaskItem(task);
       });
+    
+  }
+
+  static addTask(projectTitle, task){
 
   }
 
@@ -89,7 +94,10 @@ export default class UI{
     let project = UI.getTodo();
     project
       .getProject(projectTitle)
-      .getTask(taskTitle);
+      .deleteTask(taskTitle);
+    UI.refreshTaskList(projectTitle);
+    UI.saveTodo(project);
+    UI.loadTasks(projectTitle);
 
 
   }
@@ -98,9 +106,10 @@ export default class UI{
   // General UI Layout
   static createHeaderDiv(){
     let element = document.createElement('header');
-    let title = document.createElement('h1')
-    title.textContent = 'Todo Application';
-    element.appendChild(title);
+    element.innerHTML = `
+      <img src="${HeaderIcon}">
+      <h1>Todo Application</h1>
+    `
     document.body.appendChild(element);
   }
 
@@ -116,7 +125,7 @@ export default class UI{
     element.classList.add('task-list');    
     element.innerHTML = `
       <div class="task-header">
-        <h1>Tasks</h1>
+        <h1 class="project-title"></h1>
       </div>
 
       <div class="task-list-container">
@@ -144,11 +153,12 @@ export default class UI{
   // ***************************
 
   // DOM Related Functions
-  static refreshTaskList(){
+
+  static refreshTaskList(projectTitle){
     let taskList = document.querySelector('.task-list');
     taskList.innerHTML = `
       <div class="task-header">
-        <h1>Tasks</h1>
+        <h1 class="project-title">${projectTitle}</h1>
       </div>
 
       <div class="task-list-container">
@@ -182,13 +192,13 @@ export default class UI{
       <p>${project.projectTitle}</p>
     `
     projectTitle.addEventListener('click', (e)=>{
-      UI.refreshTaskList();
+      // UI.refreshTaskList();
+      UI.refreshTaskList(e.target.textContent);
       UI.loadTasks(e.target.textContent);
 
       // Add active state on selected project
       const projectItems = document.querySelectorAll('.project-btn');
       projectItems.forEach((project) => project.classList.remove('active'));
-      // console.log(projectItems)
       const projectItem = e.target.parentNode.parentNode;
       projectItem.classList.add('active');
       
@@ -208,8 +218,8 @@ export default class UI{
     projectBtnGroup.append(editBtn, deleteBtn);
     
     deleteBtn.addEventListener('click', (e) =>{
-      UI.deleteProject(e.target.parentNode.parentNode.firstChild.textContent.trim());
-      console.log(e.target.parentNode.parentNode.firstChild.textContent.trim());
+      const projectTitle = e.target.parentNode.parentNode.firstChild.textContent.trim()
+      UI.deleteProject(projectTitle);
     })
     element.appendChild(projectBtnGroup);
     projectList.appendChild(element);
@@ -235,21 +245,9 @@ export default class UI{
     deleteBtn.src = TrashIcon;
     deleteBtn.setAttribute('style', 'width: 24px; height: 24px;') //temporary
     deleteBtn.addEventListener('click', (e)=>{
-      console.log(e);
       const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
       const taskTitle = e.target.parentNode.parentNode.firstChild.textContent.trim();
-      console.log(projectTitle);
-      console.log(taskTitle);
-
-
-      // Delete Function
-      let project = UI.getTodo();
-      project
-        .getProject(projectTitle)
-        .deleteTask(taskTitle);
-      UI.refreshTaskList();
-      UI.saveTodo(project);
-      UI.loadTasks(projectTitle);
+      UI.deleteTask(projectTitle, taskTitle);
     })
 
     rightTaskSection.appendChild(deleteBtn);
@@ -281,8 +279,7 @@ export default class UI{
   }
  // ***************************
 
-
- // Forms
+  // Forms
   static loadForms(){
     UI.createProjectForm();
   }
