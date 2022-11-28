@@ -14,8 +14,9 @@ export default class UI{
     UI.loadButtons();
     UI.loadProjects();
     UI.loadForms();
-
+    UI.addTaskButton();
   }
+
 
   static saveTodo(data){
     localStorage.setItem('todoList', JSON.stringify(data));
@@ -206,22 +207,19 @@ export default class UI{
 
     element.appendChild(projectTitle);
 
-    let projectBtnGroup = document.createElement('div')
-    projectBtnGroup.classList.add('right-btn-section');
-
-    let editBtn = document.createElement('img');
-    editBtn.src = EditIcon;
+    let projectBtnContainer = document.createElement('div')
+    projectBtnContainer.classList.add('right-btn-section');
 
     let deleteBtn = document.createElement('img');
     deleteBtn.src = TrashIcon;
 
-    projectBtnGroup.append(editBtn, deleteBtn);
+    projectBtnContainer.append(deleteBtn);
     
     deleteBtn.addEventListener('click', (e) =>{
       const projectTitle = e.target.parentNode.parentNode.firstChild.textContent.trim()
       UI.deleteProject(projectTitle);
     })
-    element.appendChild(projectBtnGroup);
+    element.appendChild(projectBtnContainer);
     projectList.appendChild(element);
   }
 
@@ -276,6 +274,33 @@ export default class UI{
       projectForm.style.display = 'flex';
     });
     projectHeader.appendChild(element);
+  }
+
+
+  static addTaskButton(){
+    let reference = document.querySelector('header');
+    // console.log(reference);
+
+    let element = document.createElement('button');
+    element.addEventListener('click', (e)=>{
+      
+      // Algorithm:
+      // [1] Get Specific Project
+      const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
+      console.log(projectTitle);
+      let todo = UI.getTodo();
+      // [2] Add task tied to that specific project
+      todo.getProject(projectTitle).addTask(new Task('Test Task', '11-28-2022', 'Low'));
+      UI.saveTodo(todo);
+      UI.refreshTaskList(projectTitle);
+      UI.loadTasks(projectTitle);
+   
+    });
+
+    
+    element.classList.add('add-task');
+    element.textContent = 'Add Task';
+    reference.appendChild(element);
   }
  // ***************************
 
