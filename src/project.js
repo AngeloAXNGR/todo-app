@@ -35,11 +35,6 @@ export default class Project{
     return this.tasks.find((task) => task.getTitle() === taskTitle);
   }
 
-  // deleteTask(projectTitle, taskTitle){
-  //   console.log(projectTitle);
-  //   console.log(taskTitle);
-  // }
-
   deleteTask(taskTitle){
     const taskToDelete = this.tasks.find(
       (task) => task.getTitle() === taskTitle
@@ -47,4 +42,7 @@ export default class Project{
     this.tasks.splice(this.tasks.indexOf(taskToDelete), 1)
   }
 
+  // updateTask(taskTitle){
+
+  // }
 }

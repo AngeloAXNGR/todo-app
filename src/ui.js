@@ -163,9 +163,13 @@ export default class UI{
   // DOM Related Functions
 
   static refreshTaskList(projectTitle){
-    
     let taskList = document.querySelector('.task-list');
-    taskList.innerHTML = `
+    if(projectTitle === ''){
+      taskList.innerHTML = `
+
+    `
+    }else{
+      taskList.innerHTML = `
       <div class="task-header">
         <h1 class="project-title">${projectTitle}</h1>
       </div>
@@ -178,13 +182,14 @@ export default class UI{
 
       </div>
     `
+    }
+
   }
 
   static getTaskCount(projectTitle){
-    let project = UI.getTodo();
-    let taskLength = project.getProject(projectTitle).getTasks().length;
-    console.log(taskLength);
-    return taskLength;
+    const todo = UI.getTodo();
+    let taskCount = todo.getProject(projectTitle).getTasks().length
+    return taskCount;
   }
 
   static refreshProjectList(){
