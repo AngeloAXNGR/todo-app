@@ -148,8 +148,66 @@ header > h1{
   margin: 0;
 }
 
+.form-container{
+  width: 30%;
+  position:absolute;
+  top: 20%;
+  left:0;
+  right:0;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow:hidden;
+  background-color: white;
+  display:none;
+  flex-direction: column;
+}
 
-.project-form{
+.form-header{
+  width: 100%;
+  background-color: var(--header-color);
+  text-align:center;
+  padding: 20px;
+  box-sizing:border-box;
+}
+
+.form-header > h1{
+  margin: 0;
+  color:white;
+}
+
+.form-inputs{
+  display:flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  align-items: stretch;
+}
+
+.form-row > input{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+}
+
+.form-buttons{
+  display:flex;
+  justify-content: end;
+  gap: 20px;
+}
+
+
+.form-buttons > button{
+  padding: 10px 20px;
+  font-size: 1.5rem;
+}
+
+
+/* ============================ */
+
+
+/* Tasks Section */
+/* .task-form{
   flex-direction: column;
   align-items: center;
   gap: 20px;
@@ -163,43 +221,10 @@ header > h1{
   right:0;
   margin: 0 auto;
   top:20%;
-  display:none;
-}
-
-.form-header{
-  background-color:var(--header-color);
-  color:white;
-  width: 100%;
-  text-align: center;
-}
-
-.form-header > h1{
-  margin:0;
-}
-
-.form-inputs > input{
-  font-size: 2rem;
-  /* padding: 10px 20px;s */
-}
-
-.form-buttons{
-  width: 100%;
-  margin-bottom: 20px;
   display:flex;
-  /* border: 1px solid black; */
-  justify-content: flex-end;
-  padding-right: 55px;
-  gap: 20px;
-}
-
-.form-buttons > button{
-  font-size: 1.5rem;
-  padding: 10px 20px;
-}
-
+} */
 
 /* ============================ */
-
 .task-list{
   flex:3;
   background-color: var(--task-section-color);

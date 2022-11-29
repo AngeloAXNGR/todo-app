@@ -11,9 +11,10 @@ export default class UI{
   static loadHomePage(){
     UI.createHeaderDiv();
     UI.createMainContentDiv(UI.createProjectListDiv(), UI.createTaskListDiv());
+    UI.loadForms();
     UI.loadButtons();
     UI.loadProjects();
-    UI.loadForms();
+
     UI.addTaskButton();
   }
 
@@ -261,6 +262,7 @@ export default class UI{
   static loadButtons(){
     console.log('loadButtons() is called');
     UI.addProjectButton();
+    UI.createProjectFormButtons();
   }
 
   static addProjectButton(){
@@ -270,7 +272,7 @@ export default class UI{
     element.src = AddIcon;
     element.addEventListener('click', () =>{
 
-      let projectForm = document.querySelector('.project-form');
+      let projectForm = document.querySelector('.form-container');
       projectForm.style.display = 'flex';
     });
     projectHeader.appendChild(element);
@@ -278,6 +280,7 @@ export default class UI{
 
 
   static addTaskButton(){
+    // Temporary placement for add task button is in the header
     let reference = document.querySelector('header');
     // console.log(reference);
 
@@ -302,15 +305,29 @@ export default class UI{
     element.textContent = 'Add Task';
     reference.appendChild(element);
   }
+
+  static createProjectFormButtons(){
+    let buttonGroup = document.querySelector('.form-buttons')
+    let confirmBtn = document.createElement('button');
+    confirmBtn.classList.add('confirm-button');
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.addEventListener('click', UI.submitProjectFormInput )
+    let cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel'
+    cancelBtn.addEventListener('click', UI.closeProjectForm);
+    buttonGroup.append(confirmBtn, cancelBtn);
+  }
  // ***************************
 
   // Forms
   static loadForms(){
     UI.createProjectForm();
+    // UI.createTaskForm();
   }
 
   static closeProjectForm(){
-    let element = document.querySelector('.project-form');
+    let element = document.querySelector('.form-container');
     element.style.display = 'none';
   }
 
@@ -325,31 +342,56 @@ export default class UI{
   static createProjectForm(){
     let element = document.createElement('div');
 
-    element.classList.add('project-form');
+    element.classList.add('form-container');
     element.innerHTML = `
       <div class="form-header">
-        <div>
           <h1>Add Project</h1>
-        </div>
       </div>
       <div class="form-inputs">
-        <input type="text" placeholder="Title" id="project-title">
+        <div class="form-row">
+          <input type="text" placeholder="Title" id="project-title">
+        </div>
+      
+        <div class="form-buttons">
+
+        </div>
       </div>
     `
-    let formBtns = document.createElement('div');
-    formBtns.classList.add('form-buttons')
-    let confirmBtn = document.createElement('button');
-    confirmBtn.classList.add('confirm-button');
-    confirmBtn.textContent = 'Confirm';
-    confirmBtn.addEventListener('click', UI.submitProjectFormInput )
-    let cancelBtn = document.createElement('button');
-    cancelBtn.classList.add('cancel-btn');
-    cancelBtn.textContent = 'Cancel'
-    cancelBtn.addEventListener('click', UI.closeProjectForm);
-    formBtns.append(confirmBtn,cancelBtn);
-    
-    element.appendChild(formBtns);
+    document.body.appendChild(element);
+  }
 
+
+
+  static createTaskForm(){
+    let element = document.createElement('div');
+    element.classList.add('task-form')
+    element.innerHTML = `
+      <div class="form-header">
+        <h1>Add Task</h1>
+      </div>
+      <div class="form-inputs">
+        <input type="text" placeholder="Title" id="task-title">
+        <input type="date">
+        <select name="priority" id="priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+    `
+    // let formBtns = document.createElement('div');
+    // formBtns.classList.add('form-buttons')
+    // let confirmBtn = document.createElement('button');
+    // confirmBtn.classList.add('confirm-button');
+    // confirmBtn.textContent = 'Confirm';
+    // confirmBtn.addEventListener('click', UI.submitProjectFormInput )
+    // let cancelBtn = document.createElement('button');
+    // cancelBtn.classList.add('cancel-btn');
+    // cancelBtn.textContent = 'Cancel'
+    // cancelBtn.addEventListener('click', UI.closeProjectForm);
+    // formBtns.append(confirmBtn,cancelBtn);
+    
+    // element.appendChild(formBtns);
     document.body.appendChild(element);
   }
 }
