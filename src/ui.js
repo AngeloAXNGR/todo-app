@@ -263,12 +263,13 @@ export default class UI{
     console.log('loadButtons() is called');
     UI.addProjectButton();
     UI.createProjectFormButtons();
+    UI.createTaskFormButtons()
   }
 
   static addProjectButton(){
     let projectHeader = document.querySelector('.project-header');
     let element = document.createElement('img');
-    element.classList.add('add-button');
+    element.classList.add('add-project-button');
     element.src = AddIcon;
     element.addEventListener('click', () =>{
 
@@ -307,7 +308,20 @@ export default class UI{
   }
 
   static createProjectFormButtons(){
-    let buttonGroup = document.querySelector('.form-buttons')
+    let buttonGroup = document.querySelector('.project-form-buttons')
+    let confirmBtn = document.createElement('button');
+    confirmBtn.classList.add('confirm-button');
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.addEventListener('click', UI.submitProjectFormInput )
+    let cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel'
+    cancelBtn.addEventListener('click', UI.closeProjectForm);
+    buttonGroup.append(confirmBtn, cancelBtn);
+  }
+
+  static createTaskFormButtons(){
+    let buttonGroup = document.querySelector('.task-form-buttons')
     let confirmBtn = document.createElement('button');
     confirmBtn.classList.add('confirm-button');
     confirmBtn.textContent = 'Confirm';
@@ -323,7 +337,7 @@ export default class UI{
   // Forms
   static loadForms(){
     UI.createProjectForm();
-    // UI.createTaskForm();
+    UI.createTaskForm();
   }
 
   static closeProjectForm(){
@@ -352,7 +366,7 @@ export default class UI{
           <input type="text" placeholder="Title" id="project-title">
         </div>
       
-        <div class="form-buttons">
+        <div class="project-form-buttons">
 
         </div>
       </div>
@@ -364,34 +378,28 @@ export default class UI{
 
   static createTaskForm(){
     let element = document.createElement('div');
-    element.classList.add('task-form')
+    element.classList.add('form-container')
     element.innerHTML = `
       <div class="form-header">
         <h1>Add Task</h1>
       </div>
       <div class="form-inputs">
-        <input type="text" placeholder="Title" id="task-title">
-        <input type="date">
-        <select name="priority" id="priority">
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-      </div>
+        <div class="form-row">
+          <input type="text" placeholder="Title" id="task-title">
+        </div>
+        <div class="form-row">
+          <input type="date">
+          <select name="priority" id="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="task-form-buttons">
+
+        </div>
     `
-    // let formBtns = document.createElement('div');
-    // formBtns.classList.add('form-buttons')
-    // let confirmBtn = document.createElement('button');
-    // confirmBtn.classList.add('confirm-button');
-    // confirmBtn.textContent = 'Confirm';
-    // confirmBtn.addEventListener('click', UI.submitProjectFormInput )
-    // let cancelBtn = document.createElement('button');
-    // cancelBtn.classList.add('cancel-btn');
-    // cancelBtn.textContent = 'Cancel'
-    // cancelBtn.addEventListener('click', UI.closeProjectForm);
-    // formBtns.append(confirmBtn,cancelBtn);
-    
-    // element.appendChild(formBtns);
+
     document.body.appendChild(element);
   }
 }
