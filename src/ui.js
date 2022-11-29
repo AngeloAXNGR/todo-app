@@ -58,7 +58,6 @@ export default class UI{
   }  
 
   static addProject(project){
-    // let testProj = new Project('Test');
     let todo =  UI.getTodo();
     UI.refreshProjectList();
     todo.addProject(project);
@@ -88,8 +87,14 @@ export default class UI{
     
   }
 
-  static addTask(projectTitle, task){
-
+  static addTask(projectTitle, taskTitle, date, priority){
+      let todo = UI.getTodo();
+      todo
+        .getProject(projectTitle)
+        .addTask(new Task(taskTitle,date,priority ));
+      UI.saveTodo(todo)  ;
+      UI.refreshTaskList(projectTitle);
+      UI.loadTasks(projectTitle);
   }
 
   static deleteTask(projectTitle, taskTitle){
@@ -194,7 +199,6 @@ export default class UI{
       <p>${project.projectTitle}</p>
     `
     projectTitle.addEventListener('click', (e)=>{
-      // UI.refreshTaskList();
       UI.refreshTaskList(e.target.textContent);
       UI.loadTasks(e.target.textContent);
 
@@ -273,7 +277,7 @@ export default class UI{
     element.src = AddIcon;
     element.addEventListener('click', () =>{
 
-      let projectForm = document.querySelector('.form-container');
+      let projectForm = document.querySelector('.project-form-container');
       projectForm.style.display = 'flex';
     });
     projectHeader.appendChild(element);
@@ -287,18 +291,9 @@ export default class UI{
 
     let element = document.createElement('button');
     element.addEventListener('click', (e)=>{
+      let taskForm = document.querySelector('.task-form-container');
+      taskForm.style.display = 'flex';
       
-      // Algorithm:
-      // [1] Get Specific Project
-      const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
-      console.log(projectTitle);
-      let todo = UI.getTodo();
-      // [2] Add task tied to that specific project
-      todo.getProject(projectTitle).addTask(new Task('Test Task', '11-28-2022', 'Low'));
-      UI.saveTodo(todo);
-      UI.refreshTaskList(projectTitle);
-      UI.loadTasks(projectTitle);
-   
     });
 
     
@@ -325,11 +320,11 @@ export default class UI{
     let confirmBtn = document.createElement('button');
     confirmBtn.classList.add('confirm-button');
     confirmBtn.textContent = 'Confirm';
-    confirmBtn.addEventListener('click', UI.submitProjectFormInput )
+    confirmBtn.addEventListener('click', UI.submitTaskFormInput)
     let cancelBtn = document.createElement('button');
     cancelBtn.classList.add('cancel-btn');
     cancelBtn.textContent = 'Cancel'
-    cancelBtn.addEventListener('click', UI.closeProjectForm);
+    cancelBtn.addEventListener('click', UI.closeTaskForm);
     buttonGroup.append(confirmBtn, cancelBtn);
   }
  // ***************************
@@ -340,23 +335,12 @@ export default class UI{
     UI.createTaskForm();
   }
 
-  static closeProjectForm(){
-    let element = document.querySelector('.form-container');
-    element.style.display = 'none';
-  }
 
-  static submitProjectFormInput(){
-    let input = document.querySelector('#project-title');
-    let project = new Project(input.value);
-    UI.addProject(project);
-    UI.closeProjectForm();
-    input.value = '';
-  }
 
   static createProjectForm(){
     let element = document.createElement('div');
 
-    element.classList.add('form-container');
+    element.classList.add('project-form-container');
     element.innerHTML = `
       <div class="form-header">
           <h1>Add Project</h1>
@@ -374,11 +358,24 @@ export default class UI{
     document.body.appendChild(element);
   }
 
+  static submitProjectFormInput(){
+    let input = document.querySelector('#project-title');
+    let project = new Project(input.value);
+    UI.addProject(project);
+    UI.closeProjectForm();
+    input.value = '';
+  }
+
+
+  static closeProjectForm(){
+    let element = document.querySelector('.project-form-container');
+    element.style.display = 'none';
+  }
 
 
   static createTaskForm(){
     let element = document.createElement('div');
-    element.classList.add('form-container')
+    element.classList.add('task-form-container')
     element.innerHTML = `
       <div class="form-header">
         <h1>Add Task</h1>
@@ -388,7 +385,7 @@ export default class UI{
           <input type="text" placeholder="Title" id="task-title">
         </div>
         <div class="form-row">
-          <input type="date">
+          <input type="date" id="task-date">
           <select name="priority" id="priority">
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
@@ -401,6 +398,24 @@ export default class UI{
     `
 
     document.body.appendChild(element);
+  }
+
+  static submitTaskFormInput(){
+      const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
+      let taskTitle = document.querySelector('#task-title');
+      let taskDate = document.querySelector('#task-date');
+      let taskPriority = document.querySelector('#priority');
+      UI.addTask(projectTitle, taskTitle.value, taskDate.value, taskPriority.value);
+      UI.closeTaskForm();
+
+      taskTitle.value = '';
+      taskDate.value = '';
+      taskPriority.value = 'Low';
+  }
+
+  static closeTaskForm(){
+    let element = document.querySelector('.task-form-container');
+    element.style.display = 'none';
   }
 }
  // ***************************

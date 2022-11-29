@@ -140,7 +140,6 @@ header > h1{
   align-items: center;
   gap: 10px;
   width: 100%;
-  /* border: 2px solid black; */
 }
 
 .left-btn-section > p{
@@ -148,7 +147,8 @@ header > h1{
   width:inherit;
 }
 
-.form-container{
+.project-form-container,
+.task-form-container{
   width: 30%;
   position:absolute;
   top: 20%;
@@ -161,6 +161,7 @@ header > h1{
   display:none;
   flex-direction: column;
 }
+
 
 .form-header{
   width: 100%;
