@@ -15,7 +15,6 @@ export default class UI{
     UI.loadButtons();
     UI.loadProjects();
 
-    UI.addTaskButton();
   }
 
 
@@ -94,6 +93,7 @@ export default class UI{
         .addTask(new Task(taskTitle,date,priority ));
       UI.saveTodo(todo)  ;
       UI.refreshTaskList(projectTitle);
+      UI.addTaskButton();
       UI.loadTasks(projectTitle);
   }
 
@@ -102,8 +102,9 @@ export default class UI{
     project
       .getProject(projectTitle)
       .deleteTask(taskTitle);
-    UI.refreshTaskList(projectTitle);
     UI.saveTodo(project);
+    UI.refreshTaskList(projectTitle);
+    UI.addTaskButton();
     UI.loadTasks(projectTitle);
 
 
@@ -162,16 +163,28 @@ export default class UI{
   // DOM Related Functions
 
   static refreshTaskList(projectTitle){
+    
     let taskList = document.querySelector('.task-list');
     taskList.innerHTML = `
       <div class="task-header">
         <h1 class="project-title">${projectTitle}</h1>
       </div>
 
+      <div class="add-task-section">
+        <h1>Tasks(${UI.getTaskCount(projectTitle)})</h1>
+      </div>
+
       <div class="task-list-container">
 
       </div>
     `
+  }
+
+  static getTaskCount(projectTitle){
+    let project = UI.getTodo();
+    let taskLength = project.getProject(projectTitle).getTasks().length;
+    console.log(taskLength);
+    return taskLength;
   }
 
   static refreshProjectList(){
@@ -200,6 +213,7 @@ export default class UI{
     `
     projectTitle.addEventListener('click', (e)=>{
       UI.refreshTaskList(e.target.textContent);
+      UI.addTaskButton();
       UI.loadTasks(e.target.textContent);
 
       // Add active state on selected project
@@ -244,6 +258,10 @@ export default class UI{
       <h1>${task.dueDate}</h1>
       <h1>${task.priority}</h1>
     `
+    let editBtn = document.createElement('img');
+    editBtn.src = EditIcon;
+    editBtn.setAttribute('style', 'width: 24px; height: 24px;');
+
     let deleteBtn = document.createElement('img');
     deleteBtn.src = TrashIcon;
     deleteBtn.setAttribute('style', 'width: 24px; height: 24px;') //temporary
@@ -253,7 +271,7 @@ export default class UI{
       UI.deleteTask(projectTitle, taskTitle);
     })
 
-    rightTaskSection.appendChild(deleteBtn);
+    rightTaskSection.append(editBtn,deleteBtn);
 
     element.append(leftTaskSection, rightTaskSection);
     taskList.appendChild(element);
@@ -286,10 +304,11 @@ export default class UI{
 
   static addTaskButton(){
     // Temporary placement for add task button is in the header
-    let reference = document.querySelector('header');
-    // console.log(reference);
+    let reference = document.querySelector('.add-task-section');
+    console.log(reference);
 
-    let element = document.createElement('button');
+    let element = document.createElement('img');
+    element.src = AddIcon;
     element.addEventListener('click', (e)=>{
       let taskForm = document.querySelector('.task-form-container');
       taskForm.style.display = 'flex';
