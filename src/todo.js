@@ -4,10 +4,10 @@ import Task from "./task";
 export default class Todo{
   constructor(){
     this.projects = []
-    this.projects.push(new Project('Web Development'));
-    this.projects.push(new Project('Game Development'));
-    this.projects.push(new Project('Database Management'));
-    this.projects.push(new Project('Coding Exercises'));
+    // this.projects.push(new Project('Web Development'));
+    // this.projects.push(new Project('Game Development'));
+    // this.projects.push(new Project('Database Management'));
+    // this.projects.push(new Project('Coding Exercises'));
   }
 
 

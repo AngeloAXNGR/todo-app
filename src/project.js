@@ -3,10 +3,10 @@ export default class Project{
   constructor(projectTitle){
     this.projectTitle = projectTitle;
     this.tasks = [];
-    this.tasks.push(new Task('Wash the Dishes', '2005-03-15', 'Low'));
-    this.tasks.push(new Task('Program a Game', '2005-03-15', 'Low'));
-    this.tasks.push(new Task('Water the Plants', '2005-03-15', 'Low'));
-    this.tasks.push(new Task('Sweep the Floor', '2005-03-15', 'Low'));
+    // this.tasks.push(new Task('Wash the Dishes', '2005-03-15', 'Low'));
+    // this.tasks.push(new Task('Program a Game', '2005-03-15', 'Low'));
+    // this.tasks.push(new Task('Water the Plants', '2005-03-15', 'Low'));
+    // this.tasks.push(new Task('Sweep the Floor', '2005-03-15', 'Low'));
   }
 
   getProjectTitle(){
