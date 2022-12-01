@@ -106,9 +106,15 @@ export default class UI{
     UI.refreshTaskList(projectTitle);
     UI.addTaskButton();
     UI.loadTasks(projectTitle);
-
-
   }
+
+  static getTask(projectTitle, taskTitle){
+    let project = UI.getTodo();
+    let taskObject = project
+                      .getProject(projectTitle)
+                      .getTask(taskTitle);
+    return taskObject
+  };
   // ***************************
 
   // General UI Layout
@@ -266,6 +272,21 @@ export default class UI{
     let editBtn = document.createElement('img');
     editBtn.src = EditIcon;
     editBtn.setAttribute('style', 'width: 24px; height: 24px;');
+    editBtn.addEventListener('click', (e)=>{
+      const projectTitle = document.querySelector('.active').firstChild.textContent.trim();
+      const taskTitle = e.target.parentNode.parentNode.firstChild.textContent.trim();
+
+      let task = UI.getTask(projectTitle,taskTitle);
+      UI.renderEditTaskForm(task.title, task.dueDate);
+      UI.createEditFormButtons(projectTitle, taskTitle);
+      
+
+      // UI.saveTodo(project);
+      // UI.refreshTaskList(projectTitle);
+      // UI.addTaskButton();
+      // UI.loadTasks(projectTitle);
+
+    });
 
     let deleteBtn = document.createElement('img');
     deleteBtn.src = TrashIcon;
@@ -283,7 +304,7 @@ export default class UI{
   }
    // ***************************
 
-  
+
 
   // Buttons
   static loadButtons(){
@@ -351,6 +372,24 @@ export default class UI{
     cancelBtn.addEventListener('click', UI.closeTaskForm);
     buttonGroup.append(confirmBtn, cancelBtn);
   }
+
+  static functionTest(){
+    console.log('test');
+  }
+  static createEditFormButtons(projectTitle, taskTitle){
+    let buttonGroup = document.querySelector('.edit-task-form-buttons')
+    let confirmBtn = document.createElement('button');
+    confirmBtn.classList.add('confirm-button');
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.addEventListener('click',(e) =>{
+      UI.submitUpdatedTaskFormInput(projectTitle, taskTitle)
+    })
+    let cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel'
+    cancelBtn.addEventListener('click', UI.closeEditTaskForm);
+    buttonGroup.append(confirmBtn, cancelBtn);
+  }
  // ***************************
 
   // Forms
@@ -409,7 +448,7 @@ export default class UI{
           <input type="text" placeholder="Title" id="task-title">
         </div>
         <div class="form-row">
-          <input type="date" id="task-date">
+          <input type="date" id="task-date"></input>
           <select name="priority" id="priority">
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
@@ -422,6 +461,55 @@ export default class UI{
     `
 
     document.body.appendChild(element);
+  }
+
+  static renderEditTaskForm(title, dueDate){
+    let element = document.createElement('div');
+    element.classList.add('edit-task-form-container')
+    element.innerHTML = `
+      <div class="form-header">
+        <h1>Edit Task</h1>
+      </div>
+      <div class="form-inputs">
+        <div class="form-row">
+          <input type="text" placeholder="Title" id="updated-task-title" value="${title}">
+        </div>
+        <div class="form-row">
+          <input type="date" id="updated-task-date" value="${dueDate}"></input>
+          <select name="priority" id="updated-priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="edit-task-form-buttons">
+
+        </div>
+    `
+    document.body.appendChild(element)
+  }
+
+  static submitUpdatedTaskFormInput(projectTitle, taskTitle){
+    let newTitle = document.querySelector('#updated-task-title').value;
+    let newDueDate = document.querySelector('#updated-task-date').value;
+    let newPriority = document.querySelector('#updated-priority').value;
+    console.log(newTitle);
+    console.log(newDueDate);
+    console.log(newPriority);
+    let project = UI.getTodo();
+    project
+      .getProject(projectTitle)
+      .updateTask(taskTitle, newTitle, newDueDate, newPriority)
+    UI.saveTodo(project);
+    UI.refreshTaskList(projectTitle);
+    UI.addTaskButton();
+    UI.loadTasks(projectTitle);
+    UI.closeEditTaskForm();
+  }
+
+  static closeEditTaskForm(){
+    let element = document.querySelector('.edit-task-form-container');
+    document.body.removeChild(element);
   }
 
   static submitTaskFormInput(){

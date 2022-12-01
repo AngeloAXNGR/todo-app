@@ -162,6 +162,19 @@ header > h1{
   flex-direction: column;
 }
 
+.edit-task-form-container{
+  width: 30%;
+  position:absolute;
+  top: 20%;
+  left:0;
+  right:0;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow:hidden;
+  background-color: white;
+  display:flex;
+  flex-direction: column;
+}
 
 .form-header{
   width: 100%;
@@ -202,7 +215,8 @@ header > h1{
 }
 
 .project-form-buttons,
-.task-form-buttons{
+.task-form-buttons,
+.edit-task-form-buttons{
   display:flex;
   justify-content: end;
   gap: 20px;
@@ -210,7 +224,8 @@ header > h1{
 
 
 .project-form-buttons > button,
-.task-form-buttons > button{
+.task-form-buttons > button,
+.edit-task-form-buttons > button{
   padding: 10px 20px;
   font-size: 1.5rem;
 }
@@ -220,22 +235,7 @@ header > h1{
 
 
 /* Tasks Section */
-/* .task-form{
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  overflow: hidden;
-  position: absolute;
-  border:1px solid black;
-  background-color: white;
-  border-radius:10px;
-  width: 450px;
-  left:0;
-  right:0;
-  margin: 0 auto;
-  top:20%;
-  display:flex;
-} */
+
 
 /* ============================ */
 .task-list{
